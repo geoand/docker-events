@@ -12,6 +12,8 @@ shadowJar {
     classifier = ''
 }
 
+libsDirName = '../docker'
+
 repositories {
     jcenter()
 }

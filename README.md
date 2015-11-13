@@ -2,7 +2,7 @@
 
     $ ./gradlew shadowJar
     
-The uber-jar ends-up in the `build/libs` directory
+The uber-jar ends-up in the `docker` directory
 
 ## Run locally
     
