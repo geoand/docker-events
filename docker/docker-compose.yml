@@ -1,0 +1,7 @@
+dockerEvents:
+        image: geoand/docker-events
+        environment:
+                - DOCKER_URL=unix:///tmp/docker.sock
+        volumes:
+                - /var/run/docker.sock:/tmp/docker.sock
+        net: "host"
