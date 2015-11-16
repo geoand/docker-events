@@ -6,7 +6,7 @@ import geoand.docker.events.container.ContainerNameUtil
 /**
  * Created by gandrianakis on 13/11/2015.
  */
-abstract class DockerModelAugmenter {
+abstract class ModelAugmenter {
 
     static void augment() {
         addFirstNameMethodToContainerModel()

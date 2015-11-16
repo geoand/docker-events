@@ -1,4 +1,4 @@
-package geoand.docker.events.events
+package geoand.docker.events.callback
 
 import com.github.dockerjava.api.model.Event
 import com.github.dockerjava.core.async.ResultCallbackTemplate

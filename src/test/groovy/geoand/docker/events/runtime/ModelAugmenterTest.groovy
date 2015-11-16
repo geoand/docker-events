@@ -6,14 +6,14 @@ import spock.lang.Specification
 /**
  * Created by gandrianakis on 13/11/2015.
  */
-class DockerModelAugmenterTest extends Specification {
+class ModelAugmenterTest extends Specification {
 
     def "firstName added to Container and returns the sanitized value of the first name of the container"(String[] names, String expectedFirstName) {
         given:
             final Container container = new Container(names: names)
 
         when:
-            DockerModelAugmenter.augment()
+            ModelAugmenter.augment()
 
         then:
             container.firstName == expectedFirstName
