@@ -5,7 +5,8 @@ import com.github.dockerjava.core.DockerClientBuilder
 import com.github.dockerjava.core.DockerClientConfig
 import com.google.common.eventbus.EventBus
 import com.google.inject.AbstractModule
-import com.google.inject.matcher.Matchers
+import com.google.inject.TypeLiteral
+import com.google.inject.matcher.AbstractMatcher
 import geoand.docker.events.callback.EventResultCallbackTemplate
 import geoand.docker.events.callback.PublishingEventResultCallbackTemplate
 import geoand.docker.events.container.ContainerFinder
@@ -14,6 +15,7 @@ import geoand.docker.events.factory.ClasspathScanningContainerNameAwareEventFrom
 import geoand.docker.events.factory.ContainerEventFromDockerApiEventFactory
 import geoand.docker.events.factory.ContainerNameAwareEventFromDockerApiEventFactory
 import geoand.docker.events.factory.SimpleDockerEventFactory
+import geoand.docker.events.listener.DockerEventListener
 import geoand.docker.events.listener.StartEventListener
 import geoand.docker.events.listener.StopEventListener
 import geoand.docker.events.runtime.ModelAugmenter
@@ -61,7 +63,10 @@ class InjectionModule extends AbstractModule {
     }
 
     private void createEventListenerBiding(EventBus eventBus) {
-        bindListener(Matchers.any(), new EventTypeListener(eventBus))
+        bindListener(
+                {TypeLiteral<?> typeLiteral -> DockerEventListener.class.isAssignableFrom(typeLiteral.rawType)} as AbstractMatcher,
+                new EventTypeListener(eventBus)
+        )
 
         bind(StartEventListener).toInstance(new StartEventListener())
         bind(StopEventListener).toInstance(new StopEventListener())

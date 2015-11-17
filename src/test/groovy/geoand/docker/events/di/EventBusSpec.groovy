@@ -11,6 +11,7 @@ import com.google.inject.util.Modules
 import geoand.docker.events.callback.EventResultCallbackTemplate
 import geoand.docker.events.container.ContainerFinder
 import geoand.docker.events.listener.StartEventListener
+import geoand.docker.events.listener.StopEventListener
 import geoand.docker.events.model.container.DockerContainerEventStart
 import spock.lang.Specification
 
@@ -25,6 +26,7 @@ class EventBusSpec extends Specification {
     final DockerClient dockerClient = Mock(DockerClient)
     final ContainerFinder containerFinder = Mock(ContainerFinder)
     final StartEventListener startEventListener = Mock(StartEventListener)
+    final StopEventListener stopEventListener = Mock(StopEventListener)
 
     final Event event = Mock(Event)
     final Container container = Mock(Container)
@@ -37,6 +39,7 @@ class EventBusSpec extends Specification {
             void configure(Binder binder) {
                 binder.bind(ContainerFinder).toInstance(containerFinder)
                 binder.bind(StartEventListener).toInstance(startEventListener)
+                binder.bind(StopEventListener).toInstance(stopEventListener)
             }
         }))
 
@@ -59,6 +62,26 @@ class EventBusSpec extends Specification {
             1 * startEventListener.handleEvent(_) >> { arguments ->
                 final DockerContainerEventStart eventStart = arguments[0]
                 assert eventStart.containerFirstName == CONTAINER_NAME
+            }
+
+    }
+
+    def "stop event emitted"() {
+        given:
+            event.id >> CONTAINER_ID
+            event.status >> "stop"
+
+        and:
+            container.names >> [CONTAINER_NAME]
+            containerFinder.find(CONTAINER_ID) >> container
+
+        when:
+            eventResultCallbackTemplate.onNext(event)
+
+        then:
+            1 * stopEventListener.handleEvent(_) >> { arguments ->
+                final DockerContainerEventStart eventStop = arguments[0]
+                assert eventStop.containerFirstName == CONTAINER_NAME
             }
 
     }
