@@ -1,4 +1,4 @@
-FROM java:8
+FROM anapsix/alpine-java:jre8
 
 MAINTAINER "Georgios Andrianakis"
 
